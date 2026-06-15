@@ -1,0 +1,52 @@
+# ECR-HiFL config — SWE-bench Lite (main experiment).
+# Endpoints are NOT here; they come from the repo-root config.yaml via EP ($HILORM_STAGE).
+# Paths below are placeholders. Replace them with your local SWE-bench pools,
+# gold files, and repository-structure cache before running experiments.
+
+dataset: princeton-nlp/SWE-bench_Lite
+split: test
+level: file                 # file | function | line  (override with --level)
+sample: null                # N in Best-of-N; null = whole pool
+
+project_file_loc: data/repo_structures
+repo_root: null             # set to a dir of checked-out repos to enable history/repair evidence
+# repo_source: data/repos   # uncomment (or pass --repo_source) to enable History evidence
+#                                          # (ephemeral copy->checkout(base_commit)->delete per instance)
+
+pools:
+  file:     data/pools/swe-bench-lite/file_level/loc_outputs.jsonl
+  function: data/pools/swe-bench-lite/related_elements/loc_outputs.jsonl
+  line:     data/pools/swe-bench-lite/edit_location_samples/loc_outputs.jsonl
+
+gold:
+  file:     data/gold/swe-bench-lite/modified_files.jsonl
+  function: data/gold/swe-bench-lite/element_level.jsonl
+  line:     data/gold/swe-bench-lite/element_level_line_number.jsonl
+
+evidence:                   # which evidence builders to run (semantic is always on)
+  semantic: true            # self-consistency vote (offline RM surrogate) + TF-IDF issue<->candidate
+  graph: true               # import / containment / neighbor graph (offline)
+  summary: true             # structural (or LLM) summary <-> issue overlap
+  history: false            # git signals; needs repo_root checkouts (off by default / offline)
+  verification: false       # LLM plausibility; needs generation server
+
+selector:
+  type: rule                # first|random|majority|oracle|rule|llm|rm
+  weights:                  # renormalized over active signals
+    rm: 0.30
+    semantic: 0.20
+    graph: 0.15
+    summary: 0.15
+    history: 0.10
+    verification: 0.10
+
+# server toggles (flip on only when the matching endpoint in config.yaml is reachable)
+use_rm_server: false
+use_summary_server: false
+use_verification_server: false
+use_llm_judge: false
+summary_model: q7bc
+verification_model: q7bc
+judge_model: null
+
+output_dir: ecr_hifl/results/lite

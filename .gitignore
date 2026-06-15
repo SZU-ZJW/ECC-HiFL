@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Local configuration and secrets
+.env
+.env.*
+*.local.yaml
+*.private.yaml
+private*.yaml
+
+# Large local data and experiment outputs
+data/
+ecr_hifl/cache/
+ecr_hifl/results/
+ecr_hifl/logs/
+stages/*/results/
+stages/*/log/
+swebench_eval/predictions/
+swebench_eval/reports/
+*.log
+*.logpath
+*.pid
+
+# Editor and OS files
+.idea/
+.vscode/
+.DS_Store

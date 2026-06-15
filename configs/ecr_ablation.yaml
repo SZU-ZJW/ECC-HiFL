@@ -1,0 +1,34 @@
+# ECR-HiFL ablation grid. Inherits the Lite data wiring and
+# adds an `ablation` block consumed by ecr_hifl.experiments.run_ablation.
+
+dataset: princeton-nlp/SWE-bench_Lite
+split: test
+project_file_loc: data/repo_structures
+repo_source: data/repos   # enables the +history row for real (ephemeral per-instance
+                                        # copy -> checkout(base_commit) -> delete; clones each instance once)
+
+pools:
+  file:     data/pools/swe-bench-lite/file_level/loc_outputs.jsonl
+  function: data/pools/swe-bench-lite/related_elements/loc_outputs.jsonl
+  line:     data/pools/swe-bench-lite/edit_location_samples/loc_outputs.jsonl
+gold:
+  file:     data/gold/swe-bench-lite/modified_files.jsonl
+  function: data/gold/swe-bench-lite/element_level.jsonl
+  line:     data/gold/swe-bench-lite/element_level_line_number.jsonl
+
+selector:
+  type: rule
+  weights: {rm: 0.30, semantic: 0.20, graph: 0.15, summary: 0.15, history: 0.10, verification: 0.10}
+
+output_dir: ecr_hifl/results/ablation
+
+ablation:
+  levels: [file, function, line]
+  sample_nums: [3, 7, 10, 15, 30]      # RQ3: stability vs N
+  baselines: [first, majority, oracle]
+  evidence_sets:                        # cumulative evidence (semantic always on)
+    - {name: "semantic",          evidence: []}
+    - {name: "+graph",            evidence: [graph]}
+    - {name: "+summary",          evidence: [graph, summary]}
+    - {name: "+history",          evidence: [graph, summary, history]}
+    - {name: "+verification(all)", evidence: [graph, summary, history, verification]}

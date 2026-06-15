@@ -1,0 +1,48 @@
+# ECR-HiFL config — SWE-bench Verified.
+# Verified ships only element-level gold; file-level eval derives the gold file set from it.
+
+dataset: princeton-nlp/SWE-bench_Verified
+split: test
+level: file
+sample: null
+
+project_file_loc: data/repo_structures
+repo_root: null
+# repo_source: data/repos   # uncomment (or pass --repo_source) to enable History evidence
+#                                          # (ephemeral copy->checkout(base_commit)->delete per instance)
+
+pools:
+  file:     data/pools/swe-bench-verified/file_level/loc_outputs.jsonl
+  # Verified has no canonical swe-bench-verfied/related_elements/ dir; function pools live under
+  # per-sampler dirs. q7bc-30 = Qwen2.5-Coder-7B policy, N=30, all 500 instances (matches Lite).
+  function: data/pools/swe-bench-verified/related_elements/loc_outputs.jsonl
+  line:     data/pools/swe-bench-verified/edit_location_full/loc_outputs.jsonl
+
+gold:
+  file:     data/gold/swe-bench-verified/element_level.jsonl
+  function: data/gold/swe-bench-verified/element_level.jsonl
+  line:     data/gold/swe-bench-verified/element_level_line_number.jsonl
+
+evidence:
+  semantic: true
+  graph: true
+  summary: true
+  history: false
+  verification: false
+
+selector:
+  type: rule
+  weights:
+    rm: 0.30
+    semantic: 0.20
+    graph: 0.15
+    summary: 0.15
+    history: 0.10
+    verification: 0.10
+
+use_rm_server: false
+use_summary_server: false
+use_verification_server: false
+use_llm_judge: false
+
+output_dir: ecr_hifl/results/verified

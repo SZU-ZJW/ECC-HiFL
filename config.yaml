@@ -1,0 +1,64 @@
+# Runtime configuration template.
+#
+# Copy this file or point HILORM_CONFIG to your own YAML before running live
+# localization or API-backed ECR-HiFL experiments. Values below are placeholders
+# and are safe to commit.
+
+common:
+  generation:
+    # OpenAI-compatible generation endpoint, for example vLLM or SGLang.
+    base_url: "http://localhost:8000/v1"
+    api_key: "EMPTY"
+
+  embedding:
+    # Used by step3_retrieve. Leave api_base/api_key null to disable external
+    # embedding services in offline runs.
+    model_name: "text-embedding-3-small"
+    api_base: null
+    api_key: null
+
+stages:
+  step1_file:
+    sglang_rm: "http://localhost:30000"
+    judge:
+      base_url: "http://localhost:8000/v1"
+      api_key: "EMPTY"
+      model: "reward-model"
+    skywork: null
+
+  step2_irrelevant:
+    sglang_rm: "http://localhost:30000"
+    judge:
+      base_url: "http://localhost:8000/v1"
+      api_key: "EMPTY"
+      model: "reward-model"
+    skywork: null
+
+  step3_retrieve:
+    sglang_rm: "http://localhost:30000"
+    judge: null
+    skywork: null
+
+  step5_element:
+    sglang_rm: "http://localhost:30000"
+    judge:
+      base_url: "http://localhost:8000/v1"
+      api_key: "EMPTY"
+      model: "reward-model"
+    skywork: null
+
+  step6_line:
+    sglang_rm: "http://localhost:30000"
+    judge:
+      base_url: "http://localhost:8000/v1"
+      api_key: "EMPTY"
+      model: "reward-model"
+    skywork:
+      url: "http://localhost:30001/classify"
+      model_path: null
+
+paths:
+  project_file_loc: "data/repo_structures"
+  pred_list_root: "data/pools"
+  start_file_root: "data/stage_outputs"
+  embedding_persist_dir: "data/embeddings"

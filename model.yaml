@@ -1,0 +1,22 @@
+# Example model endpoint registry for local experiments.
+# Update these entries to match your deployed services.
+
+model_name: "q7bc"
+backend: "vllm"
+base_url: "http://localhost:8000/v1"
+api_key: "EMPTY"
+
+model_name: "sk8b"
+backend: "sglang"
+base_url: "http://localhost:30001"
+api_key: "EMPTY"
+
+model_name: "q32bc"
+backend: "vllm"
+base_url: "http://localhost:8005/v1"
+api_key: "EMPTY"
+
+model_name: "GRM"
+backend: "vllm"
+base_url: "http://localhost:8010/v1"
+api_key: "EMPTY"
